@@ -1,0 +1,21 @@
+install.packages("RMySQL")
+library("RMySQL")
+m = dbDriver("MySQL")
+
+/setup connection to SQL server
+con = dbConnect(m, host="mydb.ics.purdue.edu", username="****", dbname="***")
+
+//list my table//
+dbListTables(con)
+
+//Send my SQL query
+res = dbSendQuery(con,"SELECT*FROM teamsfranchises;")
+
+// fetch all
+data = fetch(res,n=-1)
+
+NYA= dbSendQuery(con, "SELECT m.playerID, b.teamID, b.yearID, m.nameFirst, m.nameLast, b.2B, b.3B, b.RBI, b.AB, b.R, t.name FROM batting b INNER JOIN master m on b.playerID = m.playerID INNER JOIN teams t ON (t.yearID = b.yearID AND t.teamID = b.teamID) WHERE(t.teamID = 'NYA' AND t.yearID = 2015); ")
+data2 <- fetch(NYA, n=-1)
+
+BOS= dbSendQuery(con, "SELECT m.playerID, b.teamID, b.yearID, m.nameFirst, m.nameLast, b.2B, b.3B, b.RBI, b.AB, b.R, t.name FROM batting b INNER JOIN master m on b.playerID = m.playerID INNER JOIN teams t ON (t.yearID = b.yearID AND t.teamID = b.teamID) WHERE(t.teamID = 'BOS' AND t.yearID = 2015); ")
+data3 <- fetch(BOS, n=-1)
